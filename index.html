@@ -73,8 +73,9 @@ button:disabled{opacity:.6;cursor:wait}
 const SALT="HnBmNrJnnuo/MunCcKZKUA==",IV="yX8UmTJSlbyhwLWH",ITER=600000,LS="kai_hub_key",BAN="ec9f052f4860",FILE="hub-ec9f052f4860.bin";
 /* chạy bên trong Hub sau khi mở: 5 phút/lần và khi quay lại tab, đọc version.json; khác BAN → nút "Có cập nhật mới — bấm để tải lại" */
 function kiemBanMoi(BAN){
+  let lan=0;
   async function k(){
-    if(document.getElementById("kaiBanMoi")||location.protocol!=="https:")return;
+    if(document.getElementById("kaiBanMoi")||location.protocol!=="https:"||Date.now()-lan<60000)return;lan=Date.now();
     try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const v=await r.json();
       if(v.ban&&v.ban!==BAN){const b=document.createElement("button");b.id="kaiBanMoi";b.type="button";
         b.textContent="Có cập nhật mới"+(v.luc?" ("+v.luc+")":"")+" — bấm để tải lại";
@@ -116,7 +117,7 @@ const N=v=>{const x=typeof v==="number"?v:parseFloat(String(v||"").replace(/\./g
 const K=v=>{const x=N(v);if(!x)return"–";return Math.abs(x)>=1e6?(x/1e6).toLocaleString("vi-VN",{maximumFractionDigits:1})+" tr":Math.round(x/1000)+"K"};
 const E=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function veNhanh(D,ghi){
-  if(!D||!D.SanPham)return;const now=new Date(),t0=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  if(!D||!D.SanPham||!$("nKp"))return;const now=new Date(),t0=new Date(now.getFullYear(),now.getMonth(),now.getDate());
   const ngay=s=>{const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(s||"");return m?new Date(+m[1],m[2]-1,+m[3]):null};
   const han=h=>{const m=/(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?/.exec(h||"");if(!m)return null;let y=m[3]?+m[3]:now.getFullYear();if(y<100)y+=2000;return new Date(y,m[2]-1,+m[1])};
   const th=(D.DonHang||[]).filter(r=>{const d=ngay(r["Ngày"]);return d&&d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()&&!["Hủy","Hoàn"].includes(r["Trạng thái"])});
