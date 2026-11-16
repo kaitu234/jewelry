@@ -358,6 +358,7 @@ function vOv() {
   const tong = sp.filter(r => MUC[r['Dòng']] != null).length || 1;
   const chuY = [
     ...tre.slice(0, 6).map(r => `<div class="alert bad"><div><b>Việc quá hạn ${esc(r['Hạn'])}:</b> ${esc(r['Việc'])} <span class="muted">· ${esc(r['Người làm'])}</span></div></div>`),
+    ...(tre.length > 6 ? [`<button class="btn sm" data-v="viec" style="justify-self:start">+ ${tre.length - 6} việc quá hạn nữa · mở tab Việc →</button>`] : []),
     ...sapHet.slice(0, 5).map(r => `<div class="alert"><div><b>${esc(r['Mã'])} sắp hết:</b> còn ${fm(r['Tồn'])} · ${esc(r['Tên'])}</div></div>`),
     ...lhMo.slice(0, 4).map(r => `<div class="alert"><div><b>Lô ${esc(r['ID'])} ${esc(r['Trạng thái']).toLowerCase()}:</b> ${esc(r['Mã SP'])} × ${fm(r['Số lượng'])}${r['Ngày về'] ? ' · về ' + dmy(r['Ngày về']) : ''}</div></div>`),
   ];
